@@ -27,16 +27,26 @@
 <body>
     <canvas id="canvas" width="800" height="600"></canvas>
     <div>
-
-        <p id="rect">矩形工具</p>
-        <p id="circle">圆形工具</p>
-        <p id="line">画笔工具</p>
-        <p id="arrow">箭头工具</p>
-        <p id="draw">拖动图片</p>
-        <p id="clear">清空</p>
-        <p id="cancel">撤销</p>
-
+        <button id="clear">清空</button>
+        <button id="cancel">撤销</button>
+        <button id="save">另存为</button>
+        <select id="saveType">
+            <option value="png" selected>png</option>
+            <option value="jpeg">jpeg</option>
+            <option value="bmp">bmp</option>
+</select>
     </div>
+    <select onchange="chooseUtil()" id="chooseUtil">
+        <option value="rect">矩形工具</option>
+        <option value="circle">圆形工具</option>
+        <option value="line" selected>画笔工具</option>
+        <option value="arrow">箭头工具</option>
+    </select>
+    <select onchange="changeCircleLength()" id="circleLength">
+        <option value="2">细</option>
+        <option value="4">中</option>
+        <option value="6">粗</option>
+    </select>
     <div class="option">
         <span>矩形边框粗细：</span>
         <select onchange="changeRectLength()" id="rectLength">
@@ -127,7 +137,14 @@
 		</select>
     </div>
 </body>
+<script src="canvas2image.js"></script>
 <script src="Zpaint.js"></script>
+<script>
+    window.onload = function() {
+        paint.chooseLine();
+
+    }
+</script>
 <script>
     var paint = Zpaint(document.getElementById('canvas'))
 
@@ -144,25 +161,34 @@
     var arrowRange = document.getElementById('arrowRange')
     var arrowColor = document.getElementById('arrowColor')
 
-    document.getElementById('rect').addEventListener('click', function() {
-        paint.chooseRect();
-    })
-    document.getElementById('circle').addEventListener('click', function() {
-        paint.chooseCircle();
-    })
-    document.getElementById('line').addEventListener('click', function() {
-        paint.chooseLine();
-    })
-    document.getElementById('arrow').addEventListener('click', function() {
-        paint.chooseArrow();
-    })
+    function chooseUtil() {
+        let obj = document.getElementById("chooseUtil");
+        let temp = obj.options[obj.selectedIndex].value;
+        switch (temp) {
+            case "line":
+                paint.chooseLine();
+                break;
+            case "arrow":
+                paint.chooseArrow();
+                break;
+            case "circle":
+                paint.chooseCircle();
+                break;
+            case "rect":
+                paint.chooseRect();
+                break;
+        }
+    }
     document.getElementById('clear').addEventListener('click', function() {
         paint.clearAll();
-
     });
     document.getElementById('cancel').addEventListener('click', function() {
-        console.log(paint)
         paint.canvasUndo();
+    });
+    document.getElementById('save').addEventListener('click', function() {
+        let obj = document.getElementById("saveType");
+        let temp = obj.options[obj.selectedIndex].value;
+        paint.saveAs(temp);
     });
     //rect params
     var Rlength = parseInt(rectLength.options[rectLength.selectedIndex].value);

@@ -38,17 +38,22 @@
 
 `paint.chooseCircle()`
 
-### 清空：
-
-`paint.clearAll()`
-### 撤销：
-
-`paint.canvasUndo()`
-
 #### 画笔工具其他参数
 
 画笔的粗细 paint.outerParams.line.lineWidth  
 画笔的颜色 paint.outerParams.line.color
+
+### 清空：
+
+`paint.clearAll()`
+
+### 撤销：
+
+`paint.canvasUndo()`
+
+### 图片另存为：
+
+`paint.saveAs(type)`
 
 
 

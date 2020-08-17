@@ -31,7 +31,8 @@
             this.canvas = canvas;
             this.ctx = this.canvas.getContext('2d'); //canvas对象
             this.w = this.canvas.width; //画布的宽
-            this.h = this.canvas.height; //画布的高  	
+            this.h = this.canvas.height; //画布的高  
+
             this.touch = ("createTouch" in document); //判定是否为手持设备
             this.StartEvent = this.touch ? "touchstart" : "mousedown";
             this.MoveEvent = this.touch ? "touchmove" : "mousemove";
@@ -50,6 +51,7 @@
                 circleArr: [],
                 rectArr: [],
             };
+
             /**
              * 扩展撤销功能
              */
@@ -58,24 +60,32 @@
             this.bind()
         }
         this.chooseRect = function() {
+            this.canvas.style.cursor = "crosshair";
             this.isLine = false;
             this.isArrow = false;
             this.isRect = true;
             this.isCircle = false;
         }
         this.chooseCircle = function() {
+            this.canvas.style.cursor = "crosshair";
+
             this.isLine = false;
             this.isArrow = false;
             this.isRect = false;
             this.isCircle = true;
         }
         this.chooseLine = function() {
+            //不加auto不显示
+            this.canvas.style.cursor = "url(pen.ico),auto";
+
             this.isLine = true;
             this.isArrow = false;
             this.isRect = false;
             this.isCircle = false;
         }
         this.chooseArrow = function() {
+            this.canvas.style.cursor = "default";
+
             this.isLine = false;
             this.isArrow = true;
             this.isRect = false;
@@ -325,7 +335,7 @@
                         case "circle":
                             this.status.circleArr.pop();
                             break;
-                        case " rect":
+                        case "rect":
                             this.status.rectArr.pop();
                             break;
                     }
@@ -339,6 +349,13 @@
             while (this.canvasHistory.length > 1) {
                 this.canvasUndo();
             }
+        }
+        this.saveAs = function(type) {
+            //	设置白色背景
+            this.ctx.globalCompositeOperation = "destination-over";
+            this.ctx.fillStyle = '#ffffff';
+            this.ctx.fillRect(0, 0, this.w, this.h);
+            Canvas2Image.saveAsImage(this.canvas, this.w, this.h, type);
         }
     }
     window.Zpaint = function(canvas) {
